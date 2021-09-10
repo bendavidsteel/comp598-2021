@@ -1,0 +1,3 @@
+# Explanation for inaccurate tweet count
+
+There are many tweets in the dataset that have extremely minor differences (such as spelling mistake corrections and URL changes), are tweeted out at very similar times, and come from the same author. These are likely edits or minor corrections by the author of the tweet, and should be counted as just one tweet in any analysis we do relating to tweets mentioning Trump. To count them as two separate tweets would result in the frequency of minor tweets corrections skewing any statistics we calculate.
