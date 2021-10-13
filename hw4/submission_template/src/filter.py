@@ -13,8 +13,8 @@ df = df[df['Created Date'].str.contains('/2020') | df['Closed Date'].str.contain
 df = df[df['Incident Zip'].notna()]
 
 # filter invalid dates
-df['Created Date'] = pd.to_datetime(df['Created Date'], filter='%m/%d/%Y %I:%M:%S %p')
-df['Closed Date'] = pd.to_datetime(df['Closed Date'], filter='%m/%d/%Y %I:%M:%S %p')
+df['Created Date'] = pd.to_datetime(df['Created Date'], format='%m/%d/%Y %I:%M:%S %p')
+df['Closed Date'] = pd.to_datetime(df['Closed Date'], format='%m/%d/%Y %I:%M:%S %p')
 df = df[df['Created Date'] < df['Closed Date']]
 
 new_dataset_path = os.path.join(data_dir_path, 'nyc_311_limit_filtered.csv')
