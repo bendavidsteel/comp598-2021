@@ -13,4 +13,8 @@ df['Closed Date'] = pd.to_datetime(df['Closed Date'], infer_datetime_format=True
 df['Duration'] = (df['Closed Date'] - df['Created Date']).dt.total_seconds // 3600
 df['Month'] = df['Closed Date'].dt.month
 
+df = df[['Incident Zip', 'Month', 'Duration']]
 
+all_df = df.groupby('Month')['Duration'].mean()
+
+zipcodes_df = df.groupby('Month', 'Incident Zip')
