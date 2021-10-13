@@ -1,3 +1,8 @@
+
+import os
+
+import pandas as pd
+
 from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.layouts import row, column
@@ -39,30 +44,52 @@ zip_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '00083', '10153', '10048', '10167', '10175', '07114', '20005',\
        '08542']
 
+this_dir_path = os.path.dirname(os.path.abspath(__file__))
+
+all_path = os.path.join(this_dir_path, 'all.csv')
+all_df = pd.read_csv(all_path)
+
+zipcode1_path = os.path.join(this_dir_path, zip_codes[0] + '.csv')
+zipcode1_df = pd.read_csv(zipcode1_path)
+
+zipcode2_path = os.path.join(this_dir_path, zip_codes[1] + '.csv')
+zipcode2_df = pd.read_csv(zipcode2_path)
+
 line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
-                    title="Google Stock Prices from 2005 - 2013")
+                    title="Incident Durations")
 
 line_chart.line(
                 x="date", y="open",
-                line_width=0.5, line_color="dodgerblue",
-                legend_label = "open",
-                source=google_df
+                legend_label = "All",
+                source=all_df
                 )
 
-line_chart.xaxis.axis_label = 'Time'
-line_chart.yaxis.axis_label = 'Price ($)'
+line_chart.line(
+                x="date", y="open",
+                legend_label = "Zip Code 1",
+                source=zipcode1_df
+                )
+
+line_chart.line(
+                x="date", y="open",
+                legend_label = "Zip Code 2",
+                source=zipcode2_df
+                )
+
+line_chart.xaxis.axis_label = 'Month'
+line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'
 
 line_chart.legend.location = "top_left"
 
 ### Widgets Code Starts ################################
-drop_zipcode1 = Select(title="X-Axis-Dim",
-                    options=iris.feature_names,
-                    value=iris.feature_names[0],
+drop_zipcode1 = Select(title="Zip Code 1",
+                    options=zip_codes,
+                    value=zip_codes[0],
                     width=225)
 
-drop_zipcode2 = Select(title="Y-Axis-Dim",
-                    options=iris.feature_names,
-                    value=iris.feature_names[1],
+drop_zipcode2 = Select(title="Zip Code 2",
+                    options=zip_codes,
+                    value=zip_codes[1],
                     width=225)
 
 
@@ -72,30 +99,47 @@ def update_line_chart(attrname, old, new):
     '''
         Code to update Line Chart as Per Check Box Selection
     '''
+
+    zipcode1_path = os.path.join(this_dir_path, drop_zipcode1.value + '.csv')
+    zipcode1_df = pd.read_csv(zipcode1_path)
+
+    zipcode2_path = os.path.join(this_dir_path, drop_zipcode2.value + '.csv')
+    zipcode2_df = pd.read_csv(zipcode2_path)
+
     line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
-                        title="Google Stock Prices from 2005 - 2013")
+                    title="Incident Durations")
 
-    for option in checkbox_grp.active:
-        line_chart.line(
-                x="date", y=checkbox_options[option],
-                line_width=0.5, line_color=price_color_map[checkbox_options[option]],
-                legend_label=checkbox_options[option],
-                source=google_df
-            )
+    line_chart.line(
+                    x="date", y="open",
+                    legend_label = "All",
+                    source=all_df
+                    )
 
-    line_chart.xaxis.axis_label = 'Time'
-    line_chart.yaxis.axis_label = 'Price ($)'
+    line_chart.line(
+                    x="date", y="open",
+                    legend_label = "Zip Code 1",
+                    source=zipcode1_df
+                    )
+
+    line_chart.line(
+                    x="date", y="open",
+                    legend_label = "Zip Code 2",
+                    source=zipcode2_df
+                    )
+
+    line_chart.xaxis.axis_label = 'Month'
+    line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'
 
     line_chart.legend.location = "top_left"
 
-    layout_with_widgets.children[0].children[1] = line_chart
+    layout_with_widgets.children[-1] = line_chart
 
 #### Registering Widget Attribute Change with Methods Code Starts ############# 
-drop_zipcode1.on_change("active", update_line_chart)
-drop_zipcode2.on_change("active", update_line_chart)
+drop_zipcode1.on_change("zipcode1", update_line_chart)
+drop_zipcode2.on_change("zipcode2", update_line_chart)
 
 ####### Widgets Layout #################
-layout_with_widgets = column(line_chart)
+layout_with_widgets = column(drop_zipcode1, drop_zipcode2, line_chart)
 
 ############ Creating Dashboard ################
 curdoc().add_root(layout_with_widgets)
