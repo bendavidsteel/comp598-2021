@@ -7,6 +7,7 @@ from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.layouts import row, column
 from bokeh.models import Select
+from bokeh.models.tickers import MonthsTicker
 
 zip_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '10304', '10014', '11422', '11101', '11418', '11217', '10037',\
@@ -43,6 +44,9 @@ zip_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '10055', '10112', '11241', '10107', '10176', '10115', '10174',\
        '00083', '10153', '10048', '10167', '10175', '07114', '20005',\
        '08542']
+zip_codes.sort()
+
+months = {1: 'Jan', 2: 'Feb', 3: 'Mar', 4: 'Apr', 5: 'May', 6: 'Jun', 7: 'Jul', 8: 'Aug', 9: 'Sep', 10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
 data_dir_path = os.path.join(this_dir_path, '..', 'data')
@@ -56,20 +60,17 @@ zipcode1_df = pd.read_csv(zipcode1_path)
 zipcode2_path = os.path.join(data_dir_path, zip_codes[1] + '.csv')
 zipcode2_df = pd.read_csv(zipcode2_path)
 
-line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
+line_chart = figure(plot_width=1000, plot_height=400, x_range=[months[idx] for idx in range(1, 13)],
                     title="Incident Durations")
 
-line_chart.line(x="Month", y="Duration",
-                legend_label = "All",
-                source=all_df)
+line_chart.line(x=[months[idx] for idx in all_df["Month"]], y=all_df["Duration"],
+                legend_label = "All", color='red')
 
-line_chart.line(x="Month", y="Duration",
-                legend_label = "Zip Code 1",
-                source=zipcode1_df)
+line_chart.line(x=[months[idx] for idx in zipcode1_df["Month"]], y=zipcode1_df["Duration"],
+                legend_label = "Zip Code 1", color='green')
 
-line_chart.line(x="Month", y="Duration",
-                legend_label = "Zip Code 2",
-                source=zipcode2_df)
+line_chart.line(x=[months[idx] for idx in zipcode2_df["Month"]], y=zipcode2_df["Duration"],
+                legend_label = "Zip Code 2", color='blue')
 
 line_chart.xaxis.axis_label = 'Month'
 line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'
@@ -101,20 +102,17 @@ def update_line_chart(attrname, old, new):
     zipcode2_path = os.path.join(data_dir_path, drop_zipcode2.value + '.csv')
     zipcode2_df = pd.read_csv(zipcode2_path)
 
-    line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
+    line_chart = figure(plot_width=1000, plot_height=400, x_range=[months[idx] for idx in range(1, 13)],
                     title="Incident Durations")
 
-    line_chart.line(x="Month", y="Duration",
-                legend_label = "All",
-                source=all_df)
+    line_chart.line(x=[months[idx] for idx in all_df["Month"]], y=all_df["Duration"],
+                legend_label = "All", color='red')
 
-    line_chart.line(x="Month", y="Duration",
-                    legend_label = "Zip Code 1",
-                    source=zipcode1_df)
+    line_chart.line(x=[months[idx] for idx in zipcode1_df["Month"]], y=zipcode1_df["Duration"],
+                    legend_label = "Zip Code 1", color='green')
 
-    line_chart.line(x="Month", y="Duration",
-                    legend_label = "Zip Code 2",
-                    source=zipcode2_df)
+    line_chart.line(x=[months[idx] for idx in zipcode2_df["Month"]], y=zipcode2_df["Duration"],
+                    legend_label = "Zip Code 2", color='blue')
 
     line_chart.xaxis.axis_label = 'Month'
     line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'

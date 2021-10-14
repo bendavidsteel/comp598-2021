@@ -15,12 +15,12 @@ df['Month'] = df['Closed Date'].dt.month
 
 df = df[['Incident Zip', 'Month', 'Duration']]
 
-all_df = df.groupby('Month')['Duration'].mean()
+all_df = df.groupby('Month')['Duration'].mean().round(decimals=2)
 
 all_path = os.path.join(data_dir_path, 'all.csv')
 all_df.to_csv(all_path)
 
-zipcodes_df = df.groupby(['Month', 'Incident Zip']).mean()
+zipcodes_df = df.groupby(['Month', 'Incident Zip']).mean().round(decimals=2).reset_index()
 unique_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '10304', '10014', '11422', '11101', '11418', '11217', '10037',\
        '11432', '11377', '11234', '11218', '11414', '10472', '10454',\
@@ -58,6 +58,7 @@ unique_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '08542']
 
 for code in unique_codes:
-    zipcode_df = zipcodes_df[zipcodes_df['Incident Zip'] == code].sort_values('Month')
+    zipcode_df = zipcodes_df.loc[zipcodes_df['Incident Zip'] == code].sort_values('Month')
+    zipcode_df = zipcode_df[['Month', 'Duration']]
     zipcode_path = os.path.join(data_dir_path, code + '.csv')
-    zipcode_df.to_csv(zipcode_path)
+    zipcode_df.to_csv(zipcode_path, index=False)
