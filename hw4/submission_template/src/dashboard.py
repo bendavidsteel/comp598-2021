@@ -59,23 +59,17 @@ zipcode2_df = pd.read_csv(zipcode2_path)
 line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
                     title="Incident Durations")
 
-line_chart.line(
-                x="date", y="open",
+line_chart.line(x="Month", y="Duration",
                 legend_label = "All",
-                source=all_df
-                )
+                source=all_df)
 
-line_chart.line(
-                x="date", y="open",
+line_chart.line(x="Month", y="Duration",
                 legend_label = "Zip Code 1",
-                source=zipcode1_df
-                )
+                source=zipcode1_df)
 
-line_chart.line(
-                x="date", y="open",
+line_chart.line(x="Month", y="Duration",
                 legend_label = "Zip Code 2",
-                source=zipcode2_df
-                )
+                source=zipcode2_df)
 
 line_chart.xaxis.axis_label = 'Month'
 line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'
@@ -110,23 +104,17 @@ def update_line_chart(attrname, old, new):
     line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
                     title="Incident Durations")
 
-    line_chart.line(
-                    x="date", y="open",
-                    legend_label = "All",
-                    source=all_df
-                    )
+    line_chart.line(x="Month", y="Duration",
+                legend_label = "All",
+                source=all_df)
 
-    line_chart.line(
-                    x="date", y="open",
+    line_chart.line(x="Month", y="Duration",
                     legend_label = "Zip Code 1",
-                    source=zipcode1_df
-                    )
+                    source=zipcode1_df)
 
-    line_chart.line(
-                    x="date", y="open",
+    line_chart.line(x="Month", y="Duration",
                     legend_label = "Zip Code 2",
-                    source=zipcode2_df
-                    )
+                    source=zipcode2_df)
 
     line_chart.xaxis.axis_label = 'Month'
     line_chart.yaxis.axis_label = 'Average Incident Duration (Hours)'
@@ -136,8 +124,8 @@ def update_line_chart(attrname, old, new):
     layout_with_widgets.children[-1] = line_chart
 
 #### Registering Widget Attribute Change with Methods Code Starts ############# 
-drop_zipcode1.on_change("zipcode1", update_line_chart)
-drop_zipcode2.on_change("zipcode2", update_line_chart)
+drop_zipcode1.on_change("value", update_line_chart)
+drop_zipcode2.on_change("value", update_line_chart)
 
 ####### Widgets Layout #################
 layout_with_widgets = column(drop_zipcode1, drop_zipcode2, line_chart)
