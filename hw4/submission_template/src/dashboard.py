@@ -45,14 +45,15 @@ zip_codes = ['11385', '10039', '11230', '11249', '10040', '11434', '11368',\
        '08542']
 
 this_dir_path = os.path.dirname(os.path.abspath(__file__))
+data_dir_path = os.path.join(this_dir_path, '..', 'data')
 
-all_path = os.path.join(this_dir_path, 'all.csv')
+all_path = os.path.join(data_dir_path, 'all.csv')
 all_df = pd.read_csv(all_path)
 
-zipcode1_path = os.path.join(this_dir_path, zip_codes[0] + '.csv')
+zipcode1_path = os.path.join(data_dir_path, zip_codes[0] + '.csv')
 zipcode1_df = pd.read_csv(zipcode1_path)
 
-zipcode2_path = os.path.join(this_dir_path, zip_codes[1] + '.csv')
+zipcode2_path = os.path.join(data_dir_path, zip_codes[1] + '.csv')
 zipcode2_df = pd.read_csv(zipcode2_path)
 
 line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
@@ -100,10 +101,10 @@ def update_line_chart(attrname, old, new):
         Code to update Line Chart as Per Check Box Selection
     '''
 
-    zipcode1_path = os.path.join(this_dir_path, drop_zipcode1.value + '.csv')
+    zipcode1_path = os.path.join(data_dir_path, drop_zipcode1.value + '.csv')
     zipcode1_df = pd.read_csv(zipcode1_path)
 
-    zipcode2_path = os.path.join(this_dir_path, drop_zipcode2.value + '.csv')
+    zipcode2_path = os.path.join(data_dir_path, drop_zipcode2.value + '.csv')
     zipcode2_df = pd.read_csv(zipcode2_path)
 
     line_chart = figure(plot_width=1000, plot_height=400, x_axis_type="datetime",
