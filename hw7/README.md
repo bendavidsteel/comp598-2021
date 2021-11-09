@@ -1,4 +1,4 @@
-# Welcome to HW6! 
+# Welcome to HW7! 
 
 **Important instructions** 
 Please read these instructions before submitting your assignment. 
@@ -9,16 +9,18 @@ To avoid pain and discomfort, follow the steps below carefully:
 In this directory, you'll find another folder, `submission_template`.
 **ALL YOUR ANSWERS** must be inside the `submission_template` folder. 
 
-HW6 has several files that must be submitted. They all should be inside `submission_template` following the file structure below:
+HW7 has several files that must be submitted. They all should be inside `submission_template` following the file structure below:
 
 ```
 submission_template
 ├── src
-    ├── collect.py
-    ├── compute_title_lengths.py
-    ├── collect_relationships.py
-├── sample1.json
-├── sample2.json
+    ├── collect_newest.py
+    ├── extract_to_tsv.py
+    ├── analyze.py
+├── concordia.json
+├── mcgill.json
+├── annotated_concordia.tsv
+├── annotated_mcgill.tsv
 ├── other folders are optional in this assignment
 ```
 
@@ -26,24 +28,26 @@ submission_template
 
 ## Your code
 
-`collect.py` must be successfully invoked with the following command:
+`collect_newest.py` must be successfully invoked with the following command:
 
-`python collect.py`
+`python collect_newest.py -o <output_file> -s <subreddit>`
 
-And it should produce the sample files (which should look like [this](https://gist.github.com/hannelita/eb06c75a7b98cc2e16cb8727039e4911) ). Make sure the produced files are also in the root of `submission_template`.
+Every time you run it, it produces a JSON file. Using the instructions in the PDF, run it twice and produce `concordia.json` and `mcgill.json`. These JSON output files must be placed in the root of `submission_template` folder.
 
-`compute_title_lengths.py` must be successfully invoked with the following command:
+`extract_to_tsv.py` must be successfully invoked with the following command:
 
-`python compute_title_lengths.py PATH_TO_SAMPLE_JSON_FILE`
+`python extract_to_tsv.py -o <out_file> <json_file> <num_posts_to_output>`
 
+Using the instructions in the PDF, run it twice to produce two `.tsv` files:
 
-There are no named arguments, just one single argument with the full path for a sample JSON file. We will test this against the sample files you submit and against our own samples, so do not hardcode anything.
+`python extract_to_tsv.py -o annotated_mcgill.tsv mcgill.json 50` produces `annotated_mcgill.tsv`, which should be placed in the root of `submission_template` folder.
+`python extract_to_tsv.py -o annotated_concordia.tsv mcgill.json 50` produces `annotated_concordia.tsv`, which should be placed in the root of `submission_template` folder.
 
-`collect_relationships.py` must be successfully invoked with the following command:
+`analyze.py` must be successfully invoked with the following command:
 
-`python collect_relationships.py -c <config-file.json> -o <output_file.json>`
+`python analyze.py -i <coded_file.tsv> [-o <output_file>]`
 
-You do not have to submit your config file nor the output file - for this question, we'll test your script against our configuration directly.
+The `-o` argument is optional. If omitted, print the result to stdout. **Ensure your script also dumps the output file when invoked with the `-o` argument**. 
 
 
 If needed, you can have auxiliary code/scripts. Make sure everything goes under the `src` folder.
@@ -109,7 +113,7 @@ Once you are happy with your results, head to the `submission_template` folder a
 
 **Replace `STUDENTID` with your McGill ID (a number).** For example, if your student ID is `123456`, run `python submission_wrapper.py -id 123456`.
 
-**Make sure you call this script from the `submission_template` folder for hw4 and not from other folders.**
+**Make sure you call this script from the `submission_template` folder for hw7 and not from other folders.**
 
 The script will zip everything needed for this assignment into a **`STUDENTID_submission_template.zip` file. You must submit the produced .zip on MyCourses**.
 
