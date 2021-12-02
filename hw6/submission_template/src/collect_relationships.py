@@ -36,10 +36,22 @@ def get_html_from_cache_or_source(person, cache_dir_path):
 
         return html
 
-def get_relationships_from_html(html):
+def get_relationships_from_html(html, person):
     soup = bs4.BeautifulSoup(html, 'html.parser')
 
     relationships = []
+
+    # get currently dating section
+    current_title = soup.find('h4', 'ff-auto-status')
+
+    if current_title is None:
+        return []
+
+    current_section = current_title.next_sibling
+    current_urls = [link['href'] for link in current_section.find_all('a')]
+    # parse the formatted name from the hyperlink
+    current_people = [link.split('/')[-1] for link in current_urls]
+    relationships += [current_person for current_person in current_people if current_person != person and 'and' not in current_person]
 
     # get title of relationships section
     relationships_title = soup.find('h4', 'ff-auto-relationships')
@@ -66,7 +78,7 @@ def main(args):
         # get the raw html from either the cache of the website
         html = get_html_from_cache_or_source(person, cache_dir_path)
         # parse the html to get the relationships
-        relationships[person] = get_relationships_from_html(html)
+        relationships[person] = get_relationships_from_html(html, person)
 
     # save to desired file
     output_file_path = os.path.abspath(args.output)
